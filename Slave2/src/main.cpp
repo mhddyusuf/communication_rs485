@@ -1,16 +1,24 @@
 #include <Arduino.h>
 #include<Wire.h>
+#include <LiquidCrystal.h>          //Include LCD library for using LCD display functions 
  
-const int EnTxPin = 2;
+const int EnTxPin = 8;
 int ledpin=9;
 int ptVal;
 int ledVal;
 
+LiquidCrystal lcd(2,3,4,5,6,7);
 
 void setup () {
   Serial.begin (9600); 
   pinMode(EnTxPin, OUTPUT );
   digitalWrite (EnTxPin, LOW );
+  lcd.begin(16,2);
+  lcd.print("RS485 COMMUNICATION");
+  lcd.setCursor(0,1);
+  lcd.print("slave-2 RS485");
+  delay(300);
+  lcd.clear();
 }
 
 void loop (){
@@ -18,9 +26,14 @@ void loop (){
     if ( Serial.read () == 'I' ){
       char function = Serial.read ();
       if (function=='B' ){
-        int angle = Serial.parseInt ();
-        analogWrite(ledpin, angle);
+        int ledval2 = Serial.parseInt ();
         if ( Serial.read () == 'F' ){
+              lcd.clear();
+              lcd.setCursor(0,0);
+              lcd.print("PWM FROM MASTER");
+              lcd.setCursor(0,1);
+              lcd.print(ledval2); 
+          analogWrite(ledpin, ledval2);
           int val = analogRead (0);
           digitalWrite (EnTxPin, HIGH ); //enable to transmit
           Serial.print ( "b" ); 
