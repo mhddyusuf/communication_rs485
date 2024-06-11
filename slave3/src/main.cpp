@@ -17,7 +17,7 @@ void setup () {
   lcd.print("TUGAS SMM");
   lcd.setCursor(0,1);
   lcd.print("RS485 COMMUNICATION");
-  delay(300);
+  delay(100);
   lcd.clear();
 }
 
@@ -28,19 +28,22 @@ void loop (){
       if (function=='C' ){
         int ledval3 = Serial.parseInt ();
         if ( Serial.read () == 'F' ){
-              lcd.clear();
-              lcd.setCursor(0,0);
-              lcd.print("PWM FROM MASTER");
-              lcd.setCursor(0,1);
-              lcd.print(ledval3); 
-          analogWrite(ledpin, ledval3);
-          int val = analogRead (0);
-          digitalWrite (EnTxPin, HIGH ); //enable to transmit
-          Serial.print ( "c" ); 
-          Serial.print (val); 
-          Serial.println ( "f" ); 
-          Serial.flush (); 
-          digitalWrite (EnTxPin, LOW ); //enable to receive
+            lcd.clear();
+            lcd.setCursor(0,0);
+            lcd.print("PWM MASTER");
+            lcd.setCursor(12,0);
+            lcd.print(ledval3); 
+            
+            analogWrite(ledpin, ledval3);
+            int val = analogRead (0);
+            int ledval= map(val, 0, 1023, 0, 255);
+            
+            digitalWrite (EnTxPin, HIGH ); //enable to transmit
+            Serial.print ( "c" ); 
+            Serial.print (ledval); 
+            Serial.print ( "f" ); 
+            Serial.flush (); 
+            digitalWrite (EnTxPin, LOW ); //enable to receive
         }
       }
     }

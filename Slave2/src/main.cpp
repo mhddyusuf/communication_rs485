@@ -28,19 +28,22 @@ void loop (){
       if (function=='B' ){
         int ledval2 = Serial.parseInt ();
         if ( Serial.read () == 'F' ){
-              lcd.clear();
-              lcd.setCursor(0,0);
-              lcd.print("PWM FROM MASTER");
-              lcd.setCursor(0,1);
-              lcd.print(ledval2); 
-          analogWrite(ledpin, ledval2);
-          int val = analogRead (0);
-          digitalWrite (EnTxPin, HIGH ); //enable to transmit
-          Serial.print ( "b" ); 
-          Serial.print (val); 
-          Serial.println ( "f" ); 
-          Serial.flush (); 
-          digitalWrite (EnTxPin, LOW ); //enable to receive
+            lcd.clear();
+            lcd.setCursor(0,0);
+            lcd.print("PWM MASTER");
+            lcd.setCursor(12,0);
+            lcd.print(ledval2); 
+            
+            analogWrite(ledpin, ledval2);
+            int val = analogRead (0);
+            int ledval= map(val, 0, 1023, 0, 255);
+            
+            digitalWrite (EnTxPin, HIGH ); //enable to transmit
+            Serial.print ( "b" ); 
+            Serial.print (ledval); 
+            Serial.print ( "f" ); 
+            Serial.flush (); 
+            digitalWrite (EnTxPin, LOW ); //enable to receive
         }
       }
     }
